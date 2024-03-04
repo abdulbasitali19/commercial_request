@@ -1,0 +1,127 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:customer",
+ "creation": "2024-03-04 11:26:13.290047",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "customer_detail_section_section",
+  "customer",
+  "lc_number",
+  "column_break_ybwcb",
+  "date",
+  "company",
+  "commercial_request_table_section",
+  "sales_invoice_number",
+  "items",
+  "total_amount_section_section",
+  "total_amount",
+  "amount_in_words",
+  "column_break_kzpfs",
+  "total_vat_amount"
+ ],
+ "fields": [
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer",
+   "unique": 1
+  },
+  {
+   "fieldname": "lc_number",
+   "fieldtype": "Data",
+   "label": "LC Number"
+  },
+  {
+   "fieldname": "column_break_ybwcb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Today",
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "fieldname": "sales_invoice_number",
+   "fieldtype": "Table MultiSelect",
+   "label": "Sales Invoice Number",
+   "options": "Sales Invoice Name"
+  },
+  {
+   "fieldname": "customer_detail_section_section",
+   "fieldtype": "Section Break",
+   "label": "Customer Detail Section"
+  },
+  {
+   "fieldname": "commercial_request_table_section",
+   "fieldtype": "Section Break",
+   "label": "Commercial Request Table"
+  },
+  {
+   "fieldname": "items",
+   "fieldtype": "Table",
+   "label": "Item Table",
+   "options": "Commercial Request Table"
+  },
+  {
+   "fieldname": "total_amount_section_section",
+   "fieldtype": "Section Break",
+   "label": "Total Amount Section"
+  },
+  {
+   "fieldname": "total_amount",
+   "fieldtype": "Data",
+   "label": "Total Amount"
+  },
+  {
+   "fieldname": "amount_in_words",
+   "fieldtype": "Data",
+   "label": "Amount In Words"
+  },
+  {
+   "fieldname": "column_break_kzpfs",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total_vat_amount",
+   "fieldtype": "Data",
+   "label": "Total Vat Amount"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-03-04 15:31:30.271941",
+ "modified_by": "Administrator",
+ "module": "Commercial Request",
+ "name": "Commercial Request",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
