@@ -16,12 +16,14 @@
   "company",
   "commercial_request_table_section",
   "sales_invoice_number",
+  "fetch_item",
   "items",
   "total_amount_section_section",
   "total_amount",
   "amount_in_words",
   "column_break_kzpfs",
-  "total_vat_amount"
+  "total_vat_amount",
+  "amended_from"
  ],
  "fields": [
   {
@@ -97,11 +99,28 @@
    "fieldtype": "Link",
    "label": "Company",
    "options": "Company"
+  },
+  {
+   "fieldname": "fetch_item",
+   "fieldtype": "Button",
+   "label": "Fetch Item",
+   "read_only": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Commercial Request",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
   }
  ],
  "index_web_pages_for_search": 1,
+ "is_submittable": 1,
  "links": [],
- "modified": "2024-03-04 15:31:30.271941",
+ "modified": "2024-03-06 15:01:20.477119",
  "modified_by": "Administrator",
  "module": "Commercial Request",
  "name": "Commercial Request",

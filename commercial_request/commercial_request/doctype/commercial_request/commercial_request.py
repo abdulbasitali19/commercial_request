@@ -6,21 +6,27 @@ import frappe
 from frappe.model.document import Document
 
 class CommercialRequest(Document):
+	def validate(self):
+		if self.sales_invoice_number:
+			self.set_is_commercial_invoice()
+		else:
+			frappe.throw("Cant Submit Document without Sales Invoice Detail")
 
-	# def validate(self):
-	# 	self.check_is_commercial_invoice_or_not()
 
-	# def check_is_commercial_invoice_or_not(self):
-	# 	for sales_invoice in self.sales_invoice_number:
-	# 		frappe.db.set_value("Sales Invoice", sales_invoice.get("sales_invoice"), "custom_is_commercial_invoice", 1)
-	# 		frappe.db.commit()
+	def set_is_commercial_invoice(self):
+		if self.sales_invoice_number:
+			for sales_invoice in self.sales_invoice_number:
+				frappe.db.set_value("Sales Invoice", sales_invoice.get("sales_invoice"), "custom_is_commercial_invoice", 1)
+				frappe.db.commit()
+
+
 
 	def get_items(self):
 		self.get_sales_invoice_items()
 
 	@frappe.whitelist()
 	def get_sales_invoice_items(self):
-		if self.sales_invoice_number and self.company:
+		if self.sales_invoice_number:
 			from frappe.utils import money_in_words
 			total_amount = 0
 			total_taxes_charges = 0
@@ -36,8 +42,6 @@ class CommercialRequest(Document):
 					})
 					total_amount += i.get("amount")
 					total_taxes_charges += taxes_and_charges
-				frappe.db.set_value("Sales Invoice", sales_invoice.get("sales_invoice"), "custom_is_commercial_invoice", 1)
-				frappe.db.commit()
 			self.total_vat_amount = "${}".format(total_taxes_charges)
 			self.total_amount = "${}".format(total_amount)
 			self.amount_in_words = number_to_words(int(total_amount))
