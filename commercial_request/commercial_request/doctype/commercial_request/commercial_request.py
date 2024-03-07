@@ -18,6 +18,7 @@ class CommercialRequest(Document):
 			for sales_invoice in self.sales_invoice_number:
 				frappe.db.set_value("Sales Invoice", sales_invoice.get("sales_invoice"), "custom_is_commercial_invoice", 1)
 				frappe.db.commit()
+			frappe.msgprint("The Following invoices are marked as Commercial Invoice {0}".format(self.sale_invoice_number))
 
 
 

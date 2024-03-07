@@ -2,52 +2,31 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on('Commercial Request', {
-
-	fetch_item:function(frm){
-		if(frm.doc.sales_invoice_number){
+	fetch_item: function (frm) {
+		if (frm.doc.sales_invoice_number) {
 			frm.call({
-					doc:frm.doc,
-					method:"get_sales_invoice_items",
-					freeze: true,
-					callback: function(r) { 
-						
-					}
-					})
+				doc: frm.doc,
+				method: "get_sales_invoice_items",
+				freeze: true,
+				callback: function (r) {
+
+				}
+			})
 
 		}
-		else{
+		else {
 			frappe.throw("Please Select Sales Invoice")
 		}
 
 	},
 
-
-
-	// sales_invoice_number:function(frm){
-	// 		if(frm.doc.sales_invoice_number){
-	// 			frm.add_custom_button(__("fetch_item"), function(){
-	// 				frm.call({
-	// 					doc:frm.doc,
-	// 					method:"get_sales_invoice_items",
-	// 					freeze: true,
-	// 					callback: function(r) {
-		
-	// 					}
-	// 				})
-				
-	// 			});
-	// 		}
 	
-	// 	},
-
-
-
-	setup:function(frm){
-		frm.set_query("sales_invoice_number",function(doc){
-			return{
-				filters : {
-					customer:doc.customer,
-					// custom_is_commercial_invoice: 0
+	setup: function (frm) {
+		frm.set_query("sales_invoice_number", function (doc) {
+			return {
+				filters: {
+					customer: doc.customer,
+					custom_is_commercial_invoice: 0
 				}
 			}
 
