@@ -50,7 +50,7 @@ class CommercialRequest(Document):
 			frappe.throw("sales Invoice Not Found")
 			self.items = []
 
-
+	
 def number_to_words(amount):
 	"""
 	Convert a given numerical amount into words.

@@ -11,9 +11,15 @@
   "customer_detail_section_section",
   "customer",
   "lc_number",
+  "payment_terms",
+  "swiftcode",
+  "country_of_origin",
   "column_break_ybwcb",
   "date",
-  "company",
+  "project",
+  "po_ref_no",
+  "port_of_loading",
+  "destination",
   "commercial_request_table_section",
   "sales_invoice_number",
   "fetch_item",
@@ -95,12 +101,6 @@
    "label": "Total Vat Amount"
   },
   {
-   "fieldname": "company",
-   "fieldtype": "Link",
-   "label": "Company",
-   "options": "Company"
-  },
-  {
    "fieldname": "fetch_item",
    "fieldtype": "Button",
    "label": "Fetch Item",
@@ -115,12 +115,48 @@
    "print_hide": 1,
    "read_only": 1,
    "search_index": 1
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "label": "Project",
+   "options": "Project"
+  },
+  {
+   "fieldname": "payment_terms",
+   "fieldtype": "Data",
+   "label": "Payment Terms"
+  },
+  {
+   "fieldname": "swiftcode",
+   "fieldtype": "Data",
+   "label": "SWIFTCODE"
+  },
+  {
+   "fieldname": "country_of_origin",
+   "fieldtype": "Data",
+   "label": "Country of origin"
+  },
+  {
+   "fieldname": "po_ref_no",
+   "fieldtype": "Data",
+   "label": "PO ref No"
+  },
+  {
+   "fieldname": "port_of_loading",
+   "fieldtype": "Data",
+   "label": "Port Of Loading"
+  },
+  {
+   "fieldname": "destination",
+   "fieldtype": "Data",
+   "label": "Destination"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-03-06 15:01:20.477119",
+ "modified": "2024-03-07 12:55:22.271130",
  "modified_by": "Administrator",
  "module": "Commercial Request",
  "name": "Commercial Request",
