@@ -23,8 +23,8 @@ frappe.ui.form.on('Commercial Request', {
 		frm.set_query("sales_invoice_number", function (doc) {
 			return {
 				filters: {
-					customer: doc.customer,
-					custom_is_commercial_invoice: 0
+					customer: doc.customer
+					
 				}
 			}
 

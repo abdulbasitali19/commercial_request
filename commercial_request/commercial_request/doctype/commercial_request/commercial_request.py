@@ -28,27 +28,50 @@ class CommercialRequest(Document):
 	@frappe.whitelist()
 	def get_sales_invoice_items(self):
 		if self.sales_invoice_number:
-			from frappe.utils import money_in_words
-			total_amount = 0
-			total_taxes_charges = 0
+			from frappe.utils import money_in_words, flt  # flt for floating point arithmetic
+			total_amount = 0.0
+			total_taxes_charges = 0.0
+			item_aggregate = {}  # Dictionary to store item aggregates
+
 			for sales_invoice in self.sales_invoice_number:
-				sales_invoice_items = frappe.db.get_all("Sales Invoice Item", filters={'parent': sales_invoice.get("sales_invoice"), 'parenttype': 'Sales Invoice'}, fields=["item_code", "item_name", "qty", "rate", "amount"])
+				sales_invoice_items = frappe.db.get_all(
+					"Sales Invoice Item", 
+					filters={'parent': sales_invoice.get("sales_invoice"), 'parenttype': 'Sales Invoice'}, 
+					fields=["item_code", "item_name", "qty", "rate", "amount"]
+				)
 				taxes_and_charges = frappe.db.get_value("Sales Invoice", sales_invoice.get("sales_invoice"), "total_taxes_and_charges")
 				for i in sales_invoice_items:
-					self.append("items", {
-						"item": i.get("item_code"),
-						"rate": "${}".format(i.get("rate")),
-						"qty": i.get("qty"),
-						"amount": "${}".format(i.get("amount"))
-					})
+					# Check if item already added
+					if i.get("item_code") in item_aggregate:
+						item_aggregate[i.get("item_code")]["qty"] += i.get("qty")
+						item_aggregate[i.get("item_code")]["amount"] += i.get("amount")
+					else:
+						item_aggregate[i.get("item_code")] = {
+							"item_name": i.get("item_name"),
+							"rate": i.get("rate"),  # Consider how to handle varying rates for the same item
+							"qty": i.get("qty"),
+							"amount": i.get("amount")
+						}
 					total_amount += i.get("amount")
-					total_taxes_charges += taxes_and_charges
+				total_taxes_charges += taxes_and_charges if taxes_and_charges else 0
+
+			# Append aggregated items
+			for item_code, aggregated_data in item_aggregate.items():
+				self.append("items", {
+					"item": item_code,
+					"item_name": aggregated_data["item_name"],  # If needed
+					"rate": "${}".format(aggregated_data["rate"]),
+					"qty": aggregated_data["qty"],
+					"amount": "${}".format(aggregated_data["amount"])
+				})
+
 			self.total_vat_amount = "${}".format(total_taxes_charges)
 			self.total_amount = "${}".format(total_amount)
-			self.amount_in_words = number_to_words(int(total_amount))
+			self.amount_in_words = money_in_words(int(total_amount))  # Ensure this function exists or use an equivalent
 		else:
-			frappe.throw("sales Invoice Not Found")
+			frappe.throw("Sales Invoice Not Found")
 			self.items = []
+
 
 	
 def number_to_words(amount):
