@@ -24,11 +24,12 @@
   "sales_invoice_number",
   "fetch_item",
   "items",
+  "sales_tax_and_charges_section",
+  "sales_tax_and_charges_commercial_request",
   "total_amount_section_section",
   "total_amount",
-  "amount_in_words",
   "column_break_kzpfs",
-  "total_vat_amount",
+  "amount_in_words",
   "amended_from"
  ],
  "fields": [
@@ -96,11 +97,6 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "total_vat_amount",
-   "fieldtype": "Data",
-   "label": "Total Vat Amount"
-  },
-  {
    "fieldname": "fetch_item",
    "fieldtype": "Button",
    "label": "Fetch Item",
@@ -151,12 +147,23 @@
    "fieldname": "destination",
    "fieldtype": "Data",
    "label": "Destination"
+  },
+  {
+   "fieldname": "sales_tax_and_charges_section",
+   "fieldtype": "Section Break",
+   "label": "Sales Tax and Charges"
+  },
+  {
+   "fieldname": "sales_tax_and_charges_commercial_request",
+   "fieldtype": "Table",
+   "label": "Sales Tax and Charges Commercial Request",
+   "options": "Sales Taxes and Charges"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-03-07 12:55:22.271130",
+ "modified": "2024-03-27 01:42:00.622032",
  "modified_by": "Administrator",
  "module": "Commercial Request",
  "name": "Commercial Request",
