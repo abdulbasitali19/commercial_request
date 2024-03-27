@@ -43,7 +43,6 @@ class CommercialRequest(Document):
                 )
                 tax_template = frappe.db.get_value("Sales Invoice", sales_invoice.get("sales_invoice"), "taxes_and_charges")
                 account_head = []
-                count = 1
                 for d in taxes_and_charges:
                  # Initialize tax_template if it does not exist
                     if tax_template not in tax_aggregate:
@@ -53,12 +52,10 @@ class CommercialRequest(Document):
                             "rate": d.get('rate'),
                             "tax_amount": d.get('tax_amount'),
                             "total": d.get('total'),
-                            "count": count
                         }
                     else:
                         # If it exists, append or aggregate the values accordingly
                         # tax_aggregate[tax_template]["rate"] += d.get("rate")
-                        tax_aggregate[tax_template]["count"] += 1
                         tax_aggregate[tax_template]["tax_amount"] += d.get("tax_amount")
                         tax_aggregate[tax_template]["total"] += d.get("total")
                         if d.get("account_head") not in tax_aggregate[tax_template]["account_head"]:
@@ -102,6 +99,8 @@ class CommercialRequest(Document):
                     "sales_invoice": sales_invoices_qty
                 })
 
+            
+            
             # Append aggregate Templates
             # for tax_template, tax_charges in tax_aggregate.items():
             #     tax_template_description = f"{tax_template} ( : {tax_charges['count']})"
@@ -117,7 +116,7 @@ class CommercialRequest(Document):
             is_first_row = True  # Flag to track if it's the first row for a tax_template
             for tax_template, tax_charges in tax_aggregate.items():
                 # Construct the description for the first row of each tax_template
-                tax_template_description = f"{tax_template} (Count: {tax_charges['count']})"
+                tax_template_description = f"{tax_template} (Count: {len(tax_aggregate)})"
                 for account_head in tax_charges["account_head"]:
                     if is_first_row:
                         # For the first row of each tax_template, append with the description
