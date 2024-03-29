@@ -26,11 +26,11 @@ class CommercialRequest(Document):
         if self.sales_invoice_number:
             from frappe.utils import money_in_words, flt  # flt for floating point arithmetic
             total_amount = 0.0
-            # total_taxes_charges = 0.0
             item_aggregate = {}  # Dictionary to store item aggregates
             tax_aggregate = {}
 
             for sales_invoice in self.sales_invoice_number:
+                
                 sales_invoice_items = frappe.db.get_all(
                     "Sales Invoice Item", 
                     filters={'parent': sales_invoice.get("sales_invoice"), 'parenttype': 'Sales Invoice'}, 
@@ -41,27 +41,44 @@ class CommercialRequest(Document):
                     filters={'parent': sales_invoice.get("sales_invoice"), 'parenttype': 'Sales Invoice'},
                     fields=["charge_type", "account_head", "rate", "tax_amount", "total"]
                 )
-                tax_template = frappe.db.get_value("Sales Invoice", sales_invoice.get("sales_invoice"), "taxes_and_charges")
-                account_head = []
-                for d in taxes_and_charges:
-                 # Initialize tax_template if it does not exist
-                    if tax_template not in tax_aggregate:
-                        tax_aggregate[tax_template] = {
-                            "charge_type": d.get('charge_type'),
-                            "account_head": [d.get('account_head')],
-                            "rate": d.get('rate'),
-                            "tax_amount": d.get('tax_amount'),
-                            "total": d.get('total'),
-                        }
-                    else:
-                        # If it exists, append or aggregate the values accordingly
-                        # tax_aggregate[tax_template]["rate"] += d.get("rate")
-                        tax_aggregate[tax_template]["tax_amount"] += d.get("tax_amount")
-                        tax_aggregate[tax_template]["total"] += d.get("total")
-                        if d.get("account_head") not in tax_aggregate[tax_template]["account_head"]:
-                            tax_aggregate[tax_template]["account_head"].append(d.get("account_head"))
+                sales_invoice_data = frappe.db.get_value("Sales Invoice", sales_invoice.get("sales_invoice"), ["taxes_and_charges", "total","total_taxes_and_charges"],as_dict=1)
+                tax_template = sales_invoice_data.taxes_and_charges
+                total = sales_invoice_data.total
+                total_taxes_and_charges = sales_invoice_data.total_taxes_and_charges
+                
+                if tax_template not in tax_aggregate:
+                    tax_aggregate[tax_template] = {}
+                    for d in taxes_and_charges:
+                        # Initialize each account head within the tax template if it does not exist
+                        account_head = d.get('account_head')
+                        if account_head not in tax_aggregate[tax_template]:
+                            tax_aggregate[tax_template][account_head] = {
+                                "charge_type": d.get('charge_type'),
+                                "account_head": d.get('account_head'),  # This becomes redundant but kept for consistency
+                                "rate": d.get('rate'),
+                                "tax_amount": d.get('tax_amount'),
+                                "total": d.get('total'),
+                            }
+                        else:
+                            # If the account head exists, only sum up the tax_amount
+                            tax_aggregate[tax_template][account_head]["tax_amount"] += d.get("tax_amount")
+                else:
+                    for d in taxes_and_charges:
+                        account_head = d.get('account_head')
+                        # Check if the account head is already part of the tax template
+                        if account_head in tax_aggregate[tax_template]:
+                            # If so, just update the tax_amount
+                            tax_aggregate[tax_template][account_head]["tax_amount"] += d.get("tax_amount")
+                        else:
+                            # If this is a new account head for the existing tax template, initialize it
+                            tax_aggregate[tax_template][account_head] = {
+                                "charge_type": d.get('charge_type'),
+                                "account_head": d.get('account_head'),
+                                "rate": d.get('rate'),
+                                "tax_amount": d.get('tax_amount'),
+                                "total": d.get('total'),
+                            }
 
-                    
                 for i in sales_invoice_items:
                     # Check if item already added
                     if i.get("item_code") in item_aggregate:
@@ -82,7 +99,7 @@ class CommercialRequest(Document):
                                 sales_invoice.get("sales_invoice"): i.get("qty")
                             }
                         }
-                    total_amount += i.get("amount")
+                    # total_amount += i.get("amount")
 
             # Append aggregated items
             for item_code, aggregated_data in item_aggregate.items():
@@ -99,62 +116,30 @@ class CommercialRequest(Document):
                     "sales_invoice": sales_invoices_qty
                 })
 
-            
-            
             # Append aggregate Templates
-            # for tax_template, tax_charges in tax_aggregate.items():
-            #     tax_template_description = f"{tax_template} ( : {tax_charges['count']})"
-            #     for account_head in tax_charges["account_head"]:
-            #         self.append("sales_tax_and_charges_commercial_request", {
-            #             "description": tax_template_description,
-            #             "charge_type": tax_charges["charge_type"],
-            #             "account_head": account_head,  # Now assigning a single account head per row
-            #             "rate": tax_charges["rate"],
-            #             "tax_amount": tax_charges["tax_amount"],
-            #             "total": tax_charges["total"]
-            #         })
-            is_first_row = True  # Flag to track if it's the first row for a tax_template
+            # Append aggregate Templates
             for tax_template, tax_charges in tax_aggregate.items():
-                # Construct the description for the first row of each tax_template
-                tax_template_description = f"{tax_template} (Count: {len(tax_aggregate)})"
-                for account_head in tax_charges["account_head"]:
-                    if is_first_row:
-                        # For the first row of each tax_template, append with the description
+                tax_template_description = f"{tax_template} (Count : {len(tax_aggregate)})"
+                self.append("sales_tax_and_charges_commercial_request", {
+                    "custom_tax_template": tax_template_description  # Tax template on the first row
+                })
+                for account_head, details in tax_charges.items():
+                    if account_head != "tax_template":  # Skip the key used for tax template
                         self.append("sales_tax_and_charges_commercial_request", {
-                            "description": tax_template_description,
-                            "charge_type": tax_charges["charge_type"],
+                            "charge_type": details["charge_type"],
                             "account_head": account_head,
-                            "rate": tax_charges["rate"],
-                            "tax_amount": tax_charges["tax_amount"],
-                            "total": tax_charges["total"]
+                            "rate": details["rate"],
+                            "tax_amount": details["tax_amount"],
+                            "total": details["total"]
                         })
-                        is_first_row = False  # Set the flag to False after appending the first row
-                    else:
-                        # For subsequent rows, append without the description
-                        self.append("sales_tax_and_charges_commercial_request", {
-                            "charge_type": tax_charges["charge_type"],
-                            "account_head": account_head,
-                            "rate": tax_charges["rate"],
-                            "tax_amount": tax_charges["tax_amount"],
-                            "total": tax_charges["total"]
-                        })
-
-                # Reset the flag for the next tax_template
-                is_first_row = True
-
-
-
-            # self.total_vat_amount = "${}".format(total_taxes_charges)
-            self.total_amount = "${}".format(total_amount)
+            # Add Total Amount to footer
+            total_amount += total + total_taxes_and_charges
+            self.total_amount = "${:.2f}".format(total_amount)
             self.amount_in_words = money_in_words(int(total_amount))  # Ensure this function exists or use an equivalent
-            
+
         else:
             frappe.throw("Sales Invoice Not Found")
             self.items = []
-            
-	
-def get_sales_tax_and_charge_sales_invoice(sales_invoice):
-    pass 
 
 
 def number_to_words(amount):

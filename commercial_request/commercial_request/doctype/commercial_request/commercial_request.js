@@ -24,7 +24,7 @@ frappe.ui.form.on('Commercial Request', {
 			return {
 				filters: {
 					customer: doc.customer,
-					custom_is_commercial_invoice: 0 
+					custom_is_commercial_invoice: 1
 					
 				}
 			}
