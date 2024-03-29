@@ -20,6 +20,10 @@
   "po_ref_no",
   "port_of_loading",
   "destination",
+  "section_break_l1s1v",
+  "currency",
+  "column_break_j7sqw",
+  "conversion_rate",
   "commercial_request_table_section",
   "sales_invoice_number",
   "fetch_item",
@@ -158,12 +162,37 @@
    "fieldtype": "Table",
    "label": "Sales Tax and Charges Commercial Request",
    "options": "Sales Taxes and Charges"
+  },
+  {
+   "fieldname": "section_break_l1s1v",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "USD",
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Currency",
+   "options": "Currency",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_j7sqw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "3.750000000",
+   "fieldname": "conversion_rate",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Exchange Rate",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-03-27 01:42:00.622032",
+ "modified": "2024-03-30 02:14:14.344859",
  "modified_by": "Administrator",
  "module": "Commercial Request",
  "name": "Commercial Request",
