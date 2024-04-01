@@ -192,11 +192,11 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-03-30 02:14:14.344859",
+ "modified": "2024-04-01 12:24:14.845380",
  "modified_by": "Administrator",
  "module": "Commercial Request",
  "name": "Commercial Request",
- "naming_rule": "Expression (old style)",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {

@@ -1,0 +1,79 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-03-31 20:34:26.829354",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "filters_section_section",
+  "from_date",
+  "customer",
+  "column_break_98r1q",
+  "to_date",
+  "sales_invoices_section",
+  "sales_invoice_list"
+ ],
+ "fields": [
+  {
+   "fieldname": "filters_section_section",
+   "fieldtype": "Section Break",
+   "label": "Filters Section"
+  },
+  {
+   "fieldname": "from_date",
+   "fieldtype": "Date",
+   "label": "From Date"
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "column_break_98r1q",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "to_date",
+   "fieldtype": "Date",
+   "label": "To Date"
+  },
+  {
+   "fieldname": "sales_invoices_section",
+   "fieldtype": "Section Break",
+   "label": "Sales Invoices"
+  },
+  {
+   "fieldname": "sales_invoice_list",
+   "fieldtype": "Table",
+   "label": "Sales Invoice List",
+   "options": "Sales Invoice List"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2024-04-01 12:25:50.381980",
+ "modified_by": "Administrator",
+ "module": "Commercial Request",
+ "name": "Sales Invoice Pdf Download",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

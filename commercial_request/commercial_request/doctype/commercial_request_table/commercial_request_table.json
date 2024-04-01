@@ -8,10 +8,12 @@
  "engine": "InnoDB",
  "field_order": [
   "item",
+  "item_name",
   "qty",
   "rate",
   "amount",
-  "sales_invoice"
+  "sales_invoice",
+  "total"
  ],
  "fields": [
   {
@@ -42,13 +44,27 @@
   {
    "fieldname": "sales_invoice",
    "fieldtype": "Small Text",
+   "in_list_view": 1,
    "label": "Sales Invoice"
+  },
+  {
+   "fieldname": "total",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "total"
+  },
+  {
+   "fetch_from": "item.item_name",
+   "fieldname": "item_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Item Name"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-03-26 20:02:18.687896",
+ "modified": "2024-03-31 20:09:32.706061",
  "modified_by": "Administrator",
  "module": "Commercial Request",
  "name": "Commercial Request Table",

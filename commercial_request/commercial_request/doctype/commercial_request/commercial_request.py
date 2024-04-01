@@ -6,11 +6,20 @@ import frappe
 from frappe.model.document import Document
 
 class CommercialRequest(Document):
+    def on_submit(self):
+        pass
+    
     def validate(self):
         if self.sales_invoice_number:
             self.set_is_commercial_invoice()
         else:
             frappe.throw("Can't Submit Document without Sales Invoice Detail")
+            
+    def check_sales_invoice_commercial_invoice(self):
+        if self.sales_invoice_number:
+            for sales_invoice in self.sales_invoice_number:
+                frappe.db.set_value("Sales Invoice", sales_invoice.get("sales_invoice"), "custom_is_commercial_invoice","1")
+        
 
     def set_is_commercial_invoice(self):
         if self.sales_invoice_number:
@@ -117,7 +126,8 @@ class CommercialRequest(Document):
             # Append aggregate Templates
             # Append aggregate Templates
             for tax_template, tax_charges in tax_aggregate.items():
-                tax_template_description = f"{tax_template} (Count : {len(tax_aggregate)})"
+                # tax_template_description = f"{tax_template} (Count : {len(tax_aggregate)})"
+                tax_template_description = tax_template
                 self.append("sales_tax_and_charges_commercial_request", {
                     "custom_tax_template": tax_template_description  # Tax template on the first row
                 })
