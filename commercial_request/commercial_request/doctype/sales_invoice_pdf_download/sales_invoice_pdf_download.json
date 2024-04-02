@@ -12,6 +12,7 @@
   "customer",
   "column_break_98r1q",
   "to_date",
+  "print_format",
   "sales_invoices_section",
   "sales_invoice_list"
  ],
@@ -51,12 +52,18 @@
    "fieldtype": "Table",
    "label": "Sales Invoice List",
    "options": "Sales Invoice List"
+  },
+  {
+   "fieldname": "print_format",
+   "fieldtype": "Link",
+   "label": "Print Format",
+   "options": "Print Format"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-04-01 12:25:50.381980",
+ "modified": "2024-04-03 00:47:26.417487",
  "modified_by": "Administrator",
  "module": "Commercial Request",
  "name": "Sales Invoice Pdf Download",

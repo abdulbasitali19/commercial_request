@@ -20,6 +20,19 @@ frappe.ui.form.on('Sales Invoice Pdf Download', {
 
 		});
 	}	
+	},
+
+	setup:function(frm){
+		frm.set_query("print_format",function(){
+			return {
+				filters: {
+					doc_type: "Sales Invoice",
+					
+				}
+			}
+
+		})
+
 	}
 
 });
