@@ -1,77 +1,65 @@
-# Copyright (c) 2024, abdul basit ali and contributors
+# Copyright (c) 2024, Abdul Basit Ali and contributors
 # For license information, please see license.txt
 
 import frappe
-from frappe.model.document import Document
-from frappe.utils.pdf import get_pdf
-from urllib.parse import urlencode
-
 import requests
+from frappe.model.document import Document
+from urllib.parse import urlencode, quote
 
 class SalesInvoicePdfDownload(Document):
-	def validate(self):
-		self.sales_invoice_list = []
-		self.populate_sales_invoice_table()
-	
+    def validate(self):
+        self.sales_invoice_list = []
+        self.populate_sales_invoice_table()
 
-	def populate_sales_invoice_table(self):
-		if self.from_date and self.to_date and self.customer:
-			sales_invoice_list = frappe.db.sql("""
-				SELECT
-					name 
-				From
-					`tabSales Invoice`
-				wHERE
-					docstatus = 1 and posting_date BETWEEN '{0}' and '{1}' and customer = '{2}'
-                                      """.format(self.from_date,self.to_date,self.customer), as_dict = 1)
-			if sales_invoice_list:
-				for sales_invoice in sales_invoice_list:
-					self.append("sales_invoice_list",{
-						"sales_invoice": sales_invoice.get("name")
-						
-					})
-    
-	@frappe.whitelist(allow_guest = True)		
-	def download_sales_invoice_pdf(self):
-		if len(self.sales_invoice_list) > 0:
-			for i in self.sales_invoice_list:
-				download_pdf(i.get("sales_invoice"))
-            
-    
-@frappe.whitelist(allow_guest=True)
-def download_pdf(name):
-    base_url = "https://pvhmiddleeast.codeplus.solutions/api/method/frappe.utils.print_format.download_pdf"
-    # base_url = "http://mysite.localhost:8000/api/method/frappe.utils.print_format.download_pdf"
-    params = {
-        'doctype': 'Sales Invoice',
-        'name': name,
-        'format': 'PVH SALES INVOICE',
-        'no_letterhead': '0',
-        'letterhead': 'No Letterhead',
-        'settings': '{}',
-        '_lang': 'en'
-    }
-    url = f"{base_url}?{urlencode(params)}"
-    
-    res = requests.get(url, verify=False)
-    if res.status_code == 200:
-        with open('file.pdf', 'wb') as f:
-            f.write(res.content)
-        return f
-    else:
-        print("Failed to download PDF:", res.status_code)
-        return None
+    def populate_sales_invoice_table(self):
+        if self.from_date and self.to_date and self.customer:
+            sales_invoice_list = frappe.db.sql("""
+                SELECT
+                    name
+                FROM
+                    `tabSales Invoice`
+                WHERE
+                    docstatus = 1 AND posting_date BETWEEN '{0}' AND '{1}' AND customer = '{2}'
+                """.format(self.from_date, self.to_date, self.customer), as_dict=1)
+            if sales_invoice_list:
+                for sales_invoice in sales_invoice_list:
+                    self.append("sales_invoice_list", {
+                        "sales_invoice": sales_invoice.get("name")
+                    })
 
+    @frappe.whitelist()
+    def download_sales_invoice_pdf(self):
+        self.download_pdf()
 
-# def generate_pdf_download_url(name):
-#     doctype = 'Sales Invoice'
-#     print_format_name = 'PVH SALES INVOICE'
-#     base_url = "http://mysite.localhost:8000/api/method/frappe.utils.print_format.download_pdf"
-#     url = f"{base_url}?doctype={doctype}&name={name}&format={print_format_name}&no_letterhead=0"
-    # url = http://site.local:8000/api/method/frappe.utils.print_format.download_pdf?doctype={doctype}&name={name}&format={print_format_name}&no_letterhead=0
-    
-#     return url
+    def download_pdf(self):
+        if len(self.sales_invoice_list) > 0:
+            generated_secret = frappe.utils.password.get_decrypted_password("User", "Administrator", fieldname='api_secret')
+            api_key = frappe.db.get_value("User", "Administrator", "api_key")
+            header = {"Authorization": "token {}:{}".format(api_key, generated_secret)}
+            for invoice in self.sales_invoice_list:  # Assuming `invoice` contains the invoice details
+                name = invoice.get('sales_invoice')  # Adjust according to your data structure
+                # base_url = "http://127.0.0.1:8000/api/method/frappe.utils.print_format.download_pdf"
+                base_url = "https://pvhmiddleeast.codeplus.solutions/api/method/frappe.utils.print_format.download_pdf?"
+                params = {
+                    'doctype': 'Sales Invoice',
+                    'name': name,
+                    'format': 'Tax Invoice 2',  # Adjusted to match your desired output
+                    'no_letterhead': '1',  # '1' for no letterhead as per your desired URL
+                    'letterhead': 'No Letterhead',
+                    'settings': '{}',
+                    '_lang': 'en'
+                }
 
+                # Use quote_via=quote to ensure spaces are encoded as %20
+                url = f"{base_url}?{urlencode(params, quote_via=quote)}"
 
-
-
+                res = requests.get(url, headers=header, verify=False)  # verify=False should be used with caution
+                if res.status_code == 200:
+                    pdf_filename = f"{name}.pdf"
+                    with open(pdf_filename, 'wb') as f:
+                        f.write(res.content)
+                    frappe.msgprint(f"Downloaded '{pdf_filename}' successfully.")
+                else:
+                    frappe.msgprint("Failed to download PDF for '{}': Status code {}".format(name, res.status_code))
+        else:
+            frappe.msgprint("No sales invoices to download.")
