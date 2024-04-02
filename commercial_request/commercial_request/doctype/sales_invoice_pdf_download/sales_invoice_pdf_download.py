@@ -39,7 +39,7 @@ class SalesInvoicePdfDownload(Document):
             for invoice in self.sales_invoice_list:  # Assuming `invoice` contains the invoice details
                 name = invoice.get('sales_invoice')  # Adjust according to your data structure
                 # base_url = "http://127.0.0.1:8000/api/method/frappe.utils.print_format.download_pdf"
-                base_url = "https://pvhmiddleeast.codeplus.solutions/api/method/frappe.utils.print_format.download_pdf?"
+                base_url = "https://pvhmiddleeast.codeplus.solutions/api/method/frappe.utils.print_format.download_pdf"
                 params = {
                     'doctype': 'Sales Invoice',
                     'name': name,
