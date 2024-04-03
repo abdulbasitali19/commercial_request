@@ -29,41 +29,41 @@ class SalesInvoicePdfDownload(Document):
                         "sales_invoice": sales_invoice.get("name")
                     })
 
-    # @frappe.whitelist()
-    # def download_sales_invoice_pdf(self):
-    #     if len(self.sales_invoice_list) > 0:
-    #          for invoice in self.sales_invoice_list:
-    #             download_pdf("Sales Invoice", invoice.get("sales_invoice"), self.print_format, letterhead=None)
-
-
-
-    @frappe.whitelist(allow_guest = True)		
+    @frappe.whitelist(allow_guest = True)
     def download_sales_invoice_pdf(self):
         if len(self.sales_invoice_list) > 0:
-            for i in self.sales_invoice_list:
-                download_pdf(i.get("sales_invoice"))
+             for invoice in self.sales_invoice_list:
+                download_pdf("Sales Invoice", invoice.get("sales_invoice"), self.print_format, letterhead=None)
 
 
-@frappe.whitelist(allow_guest=True)
-def download_pdf(name):
-    base_url = "https://pvhmiddleeast.codeplus.solutions/api/method/frappe.utils.print_format.download_pdf"
-    # base_url = "http://mysite.localhost:8000/api/method/frappe.utils.print_format.download_pdf"
-    params = {
-        'doctype': 'Sales Invoice',
-        'name': name,
-        'format': 'PVH SALES INVOICE',
-        'no_letterhead': '0',
-        'letterhead': 'No Letterhead',
-        'settings': '{}',
-        '_lang': 'en'
-    }
-    url = f"{base_url}?{urlencode(params)}"
 
-    res = requests.get(url, verify=False)
-    if res.status_code == 200:
-        with open('file.pdf', 'wb') as f:
-            f.write(res.content)
-        return f
-    else:
-        print("Failed to download PDF:", res.status_code)
-        return None
+#     @frappe.whitelist(allow_guest = True)		
+#     def download_sales_invoice_pdf(self):
+#         if len(self.sales_invoice_list) > 0:
+#             for i in self.sales_invoice_list:
+#                 download_pdf(i.get("sales_invoice"))
+
+
+# @frappe.whitelist(allow_guest=True)
+# def download_pdf(name):
+#     base_url = "https://pvhmiddleeast.codeplus.solutions/api/method/frappe.utils.print_format.download_pdf"
+#     # base_url = "http://mysite.localhost:8000/api/method/frappe.utils.print_format.download_pdf"
+#     params = {
+#         'doctype': 'Sales Invoice',
+#         'name': name,
+#         'format': 'PVH SALES INVOICE',
+#         'no_letterhead': '0',
+#         'letterhead': 'No Letterhead',
+#         'settings': '{}',
+#         '_lang': 'en'
+#     }
+#     url = f"{base_url}?{urlencode(params)}"
+
+#     res = requests.get(url, verify=False)
+#     if res.status_code == 200:
+#         with open('file.pdf', 'wb') as f:
+#             f.write(res.content)
+#         return f
+#     else:
+#         print("Failed to download PDF:", res.status_code)
+#         return None

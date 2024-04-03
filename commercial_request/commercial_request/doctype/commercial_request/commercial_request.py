@@ -111,8 +111,9 @@ class CommercialRequest(Document):
             # Append aggregated items
             for item_code, aggregated_data in item_aggregate.items():
                 sales_invoices_qty = ", ".join(
-                    f"{invoice}: {qty}" 
-                    for invoice, qty in aggregated_data["sales_invoices"].items()
+                    # f"{invoice}: {qty}" 
+                    # for invoice, qty in aggregated_data["sales_invoices"].items()
+                    invoice for invoice in aggregated_data["sales_invoices"].keys()
                 )
                 self.append("items", {
                     "item": item_code,
