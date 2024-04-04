@@ -15,8 +15,12 @@ frappe.ui.form.on('Sales Invoice Pdf Download', {
 				doc: frm.doc,
 				method: "download_sales_invoice_pdf",
 				freeze: true,
-				callback: function (r) {}
+				callback: function (r) {
+					r = r.message
+					console.log(r)
+				}
 			})
+
 
 		});
 	}	
