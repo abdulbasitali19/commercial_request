@@ -9,7 +9,6 @@
  "field_order": [
   "filters_section_section",
   "from_date",
-  "customer",
   "column_break_98r1q",
   "to_date",
   "print_format",
@@ -26,12 +25,6 @@
    "fieldname": "from_date",
    "fieldtype": "Date",
    "label": "From Date"
-  },
-  {
-   "fieldname": "customer",
-   "fieldtype": "Link",
-   "label": "Customer",
-   "options": "Customer"
   },
   {
    "fieldname": "column_break_98r1q",
@@ -63,7 +56,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-04-03 00:47:26.417487",
+ "modified": "2024-04-08 14:29:32.158670",
  "modified_by": "Administrator",
  "module": "Commercial Request",
  "name": "Sales Invoice Pdf Download",

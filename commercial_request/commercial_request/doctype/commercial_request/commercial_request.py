@@ -35,6 +35,7 @@ class CommercialRequest(Document):
         if self.sales_invoice_number:
             from frappe.utils import money_in_words, flt  # flt for floating point arithmetic
             total_amount = 0
+            total = 0
             item_aggregate = {}  # Dictionary to store item aggregates
             tax_aggregate = {}
 
@@ -107,6 +108,7 @@ class CommercialRequest(Document):
                             }
                         }
                     total_amount += i.get("amount")
+                    total += i.get("amount")
 
             # Append aggregated items
             for item_code, aggregated_data in item_aggregate.items():
@@ -146,6 +148,7 @@ class CommercialRequest(Document):
             self.total_amount = "${0}".format(round(total_amount))
             money_in_words = money_in_words((total_amount),'USD')  # Ensure this function exists or use an equivalent
             self.amount_in_words = replace_currency(money_in_words)
+            self.total = "${0}".format(round(total))
         else:
             frappe.throw("Sales Invoice Not Found")
             self.items = []

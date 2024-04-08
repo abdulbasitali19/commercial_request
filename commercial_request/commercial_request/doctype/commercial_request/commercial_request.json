@@ -14,12 +14,14 @@
   "payment_terms",
   "swiftcode",
   "country_of_origin",
+  "party_name",
   "column_break_ybwcb",
   "date",
   "project",
   "po_ref_no",
   "port_of_loading",
   "destination",
+  "address",
   "section_break_l1s1v",
   "currency",
   "column_break_j7sqw",
@@ -28,12 +30,15 @@
   "sales_invoice_number",
   "fetch_item",
   "items",
+  "total",
   "sales_tax_and_charges_section",
   "sales_tax_and_charges_commercial_request",
   "total_amount_section_section",
   "total_amount",
   "column_break_kzpfs",
   "amount_in_words",
+  "approval_section_section",
+  "approval_table",
   "amended_from"
  ],
  "fields": [
@@ -187,12 +192,38 @@
    "in_list_view": 1,
    "label": "Exchange Rate",
    "reqd": 1
+  },
+  {
+   "fieldname": "party_name",
+   "fieldtype": "Data",
+   "label": "Party Name"
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Small Text",
+   "label": "Address"
+  },
+  {
+   "fieldname": "total",
+   "fieldtype": "Data",
+   "label": "Total"
+  },
+  {
+   "fieldname": "approval_section_section",
+   "fieldtype": "Section Break",
+   "label": "Approval Section"
+  },
+  {
+   "fieldname": "approval_table",
+   "fieldtype": "Table",
+   "label": "Approval Table",
+   "options": "Approval Table"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-04-03 12:06:15.618564",
+ "modified": "2024-04-08 14:22:48.362005",
  "modified_by": "Administrator",
  "module": "Commercial Request",
  "name": "Commercial Request",
