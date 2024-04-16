@@ -127,7 +127,6 @@ class CommercialRequest(Document):
                 })
 
             # Append aggregate Templates
-            # Append aggregate Templates
             for tax_template, tax_charges in tax_aggregate.items():
                 # tax_template_description = f"{tax_template} (Count : {len(tax_aggregate)})"
                 tax_template_description = tax_template
