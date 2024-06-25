@@ -25,8 +25,8 @@ class SalesInvoicePdfDownload(Document):
                 FROM
                     `tabSales Invoice`
                 WHERE
-                    docstatus = 1 AND posting_date BETWEEN '{0}' AND '{1}'
-                """.format(self.from_date, self.to_date), as_dict=1)
+                    docstatus = 1 AND posting_date BETWEEN '{0}' AND '{1}' AND customer = '{2}'
+                """.format(self.from_date, self.to_date, self.customer), as_dict=1)
             if sales_invoice_list:
                 for sales_invoice in sales_invoice_list:
                     self.append("sales_invoice_list", {
