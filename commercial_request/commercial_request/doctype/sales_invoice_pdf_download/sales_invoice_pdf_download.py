@@ -19,14 +19,31 @@ class SalesInvoicePdfDownload(Document):
 
     def populate_sales_invoice_table(self):
         if self.from_date and self.to_date:
-            sales_invoice_list = frappe.db.sql("""
+            # sales_invoice_list = frappe.db.sql("""
+            #     SELECT
+            #         name
+            #     FROM
+            #         `tabSales Invoice`
+            #     WHERE
+            #         docstatus = 1 AND posting_date BETWEEN '{0}' AND '{1}' AND customer = '{2}' And custom_project_name = '{3}'
+            #     """.format(self.from_date, self.to_date, self.customer,self.project_name), as_dict=1)
+            # Base query without the project name filter
+            base_query = """
                 SELECT
                     name
                 FROM
                     `tabSales Invoice`
                 WHERE
                     docstatus = 1 AND posting_date BETWEEN '{0}' AND '{1}' AND customer = '{2}'
-                """.format(self.from_date, self.to_date, self.customer), as_dict=1)
+            """.format(self.from_date, self.to_date, self.customer)
+
+            # Add the project name filter if it is present
+            if self.project_name:
+                base_query += " AND custom_project_name = '{0}'".format(self.project_name)
+
+            # Execute the query
+            sales_invoice_list = frappe.db.sql(base_query, as_dict=1)
+
             if sales_invoice_list:
                 for sales_invoice in sales_invoice_list:
                     self.append("sales_invoice_list", {

@@ -10,6 +10,7 @@
   "filters_section_section",
   "from_date",
   "customer",
+  "project_name",
   "column_break_98r1q",
   "to_date",
   "print_format",
@@ -64,12 +65,17 @@
    "label": "Customer",
    "options": "Customer",
    "reqd": 1
+  },
+  {
+   "fieldname": "project_name",
+   "fieldtype": "Data",
+   "label": "Project Name"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-06-25 22:16:56.557766",
+ "modified": "2024-07-01 12:54:19.385459",
  "modified_by": "Administrator",
  "module": "Commercial Request",
  "name": "Sales Invoice Pdf Download",
