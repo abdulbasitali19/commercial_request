@@ -63,8 +63,7 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Customer",
-   "options": "Customer",
-   "reqd": 1
+   "options": "Customer"
   },
   {
    "fieldname": "project_name",
@@ -75,7 +74,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-07-01 12:54:19.385459",
+ "modified": "2024-07-03 12:39:10.617493",
  "modified_by": "Administrator",
  "module": "Commercial Request",
  "name": "Sales Invoice Pdf Download",

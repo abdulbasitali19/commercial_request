@@ -34,13 +34,16 @@ class SalesInvoicePdfDownload(Document):
                 FROM
                     `tabSales Invoice`
                 WHERE
-                    docstatus = 1 AND posting_date BETWEEN '{0}' AND '{1}' AND customer = '{2}'
-            """.format(self.from_date, self.to_date, self.customer)
+                    docstatus = 1 AND posting_date BETWEEN '{0}' AND '{1}'
+            """.format(self.from_date, self.to_date)
 
             # Add the project name filter if it is present
             if self.project_name:
                 base_query += " AND custom_project_name = '{0}'".format(self.project_name)
 
+            if self.customer:
+                base_query += " AND customer = '{0}'".format(self.customer)
+            
             # Execute the query
             sales_invoice_list = frappe.db.sql(base_query, as_dict=1)
 
